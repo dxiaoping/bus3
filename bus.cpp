@@ -80,8 +80,10 @@ user *login_menu(usersInfo *users){
     int choice;
     user *login_user;
     users=load_user(users);
+
     while(1){
         bool exit_if =false;
+        std::cout <<"欢迎使用城市公交查询系统"<<std::endl;
         std::cout << "1：登录-----------2：注册\n" << std::endl;
         std::cout << "3：退出-----------\n" << std::endl;
         if(std::cin >> choice){
@@ -141,8 +143,6 @@ void user_menu(usersInfo *users,user *loginUser){
                         return;
                     case 10:
                         road_management(bus_management1);
-                        break;
-                    case 11:
                         break;
                 }
             }

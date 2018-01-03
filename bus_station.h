@@ -15,7 +15,7 @@
 typedef struct info{
     char name[10]; //Õ¾µãÃû³Æ
     int number; //Õ¾µãºÅÂë
-    int road[road_max];
+    int road[road_max]={};
     struct info *next;
 }stationInfo;
 
@@ -47,4 +47,4 @@ void save_bus_management(bus_management *bus_management1);
 void search_line(bus_management *management1);
 void search_station(bus_management *management1);
 void search_load(bus_management *management1);
-void DFS(bus_management *management1, char station1[10], char station2[10]);
+void DFS(bus_management *management1, stationInfo *station1, stationInfo *station2);

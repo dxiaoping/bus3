@@ -208,13 +208,104 @@ void search_line(bus_management *management1) {
 }
 
 void search_load(bus_management *management1) {
-    char station1[10],station2[10];
+    stationInfo *station1,*station2;
+    station1 = (stationInfo*)malloc(sizeof(stationInfo));
+    station2 = (stationInfo*)malloc(sizeof(stationInfo));
     printf("请输入第一个站点的");
-    std::cin >> station1;
+    std::cin >> station1->name;
     printf("请输入第二个站点");
-    std::cin >> station2;
+    std::cin >> station2->name;
     DFS(management1,station1,station2);
 }
-void DFS(bus_management *management1, char station1[10], char station2[10]) {
 
+void DFS(bus_management *management1, stationInfo *station1, stationInfo *station2) {
+    int road_count=0;
+    int road_count2=0;
+    int line1[20],line2[20];
+    for (int i = 0; i < management1->line_number ; ++i) {
+        stationInfo *stationInfo1 = management1->AllBusLine[i].stationInfoName;
+        while (stationInfo1){
+            if (strcmp(stationInfo1->name,station1->name) == 0){
+                station1->road[road_count] = management1->AllBusLine[i].bus_name;
+                line1[road_count] = i;
+                road_count++;
+            }
+            stationInfo1 = stationInfo1->next;
+        }
+    }
+    for (int i = 0; i < management1->line_number ; ++i) {
+        stationInfo *stationInfo2 = management1->AllBusLine[i].stationInfoName;
+        while (stationInfo2){
+            if (strcmp(stationInfo2->name,station2->name) == 0){
+                station2->road[road_count2] = management1->AllBusLine[i].bus_name;
+                line2[road_count2] = i;
+                road_count2++;
+            }
+            stationInfo2 = stationInfo2->next;
+        }
+    }
+//    for (int j = 0; j < road_count; ++j) {
+//        std::cout<<station1->road[j]<<std::endl;
+//        std::cout<<line1[j]<<std::endl;
+//    }
+//    for (int j = 0; j < road_count2; ++j) {
+//        std::cout<<station2->road[j]<<std::endl;
+//        std::cout<<line2[j]<<std::endl;
+//    }
+    for (int  k = 0; k < road_count; ++k) {
+        stationInfo *station_1=management1->AllBusLine[line1[k]].stationInfoName;
+        while(station_1){
+            if(strcmp(station1->name,station_1->name)==0){
+                station1 = station_1;
+                break;
+            }
+            station_1 = station_1->next;
+        }
+        for (int i = 0; i < road_count2; ++i) {
+            stationInfo *station_2=management1->AllBusLine[line2[i]].stationInfoName;
+            while(station_2){
+                if(strcmp(station2->name,station_2->name) == 0){
+                    station2 = station_2;
+                    break;
+                }
+                station_2 = station_2->next;
+            }
+            if (management1->AllBusLine[line1[k]].bus_name == management1->AllBusLine[line2[i]].bus_name){
+                while(station_1!=station_2){
+                    printf("%s->",station_1->name);
+                    station_1 = station_1->next;
+                }
+                std::cout << station_1->name <<std::endl;
+                continue;
+            }
+            stationInfo *stationInfo1=management1->AllBusLine[line1[k]].stationInfoName;
+            stationInfo *stationInfo2;
+            while(stationInfo1){
+                bool if_exit= false;
+                stationInfo2 = management1->AllBusLine[line2[i]].stationInfoName;
+                while (stationInfo2){
+                    if(strcmp(stationInfo1->name,stationInfo2->name)==0&&station1->number >= stationInfo1->number&&stationInfo2->number >= station2->number){
+                        printf("\n");
+                    std::cout <<"找到一条换乘方式"<<std::endl;
+                    std::cout <<"换乘地点为："<<stationInfo1->name<<std::endl;
+                        station_1=station1;station_2=station2;
+                        while (station_1->name!=stationInfo1->name){
+                           printf("%s->",station_1->name);
+                            station_1 = station_1->next;
+                        }
+                        while (stationInfo2->name!=station2->name){
+                            printf("%s->",stationInfo2->name);
+                            stationInfo2 = stationInfo2->next;
+                        }
+                        printf("%s",stationInfo2->name);
+                        if_exit= true;
+                        break;
+                    }
+                    stationInfo2=stationInfo2->next;
+                }
+                if (if_exit)break;
+                stationInfo1=stationInfo1->next;
+            }
+        }
+    }
 }
